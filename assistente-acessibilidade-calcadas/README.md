@@ -29,19 +29,21 @@ modelos/       adaptador LoRA treinado (gerado pelo notebook 03)
 
 1. Abra cada notebook de `notebooks/` no Colab (*Arquivo › Abrir notebook › GitHub* e cole a URL do repositório).
 2. *Ambiente de execução › Alterar tipo de ambiente › T4 GPU*.
-3. Na primeira célula, troque `REPO_URL` pela URL deste repositório.
-4. Rode **na ordem** com *Ambiente de execução › Executar tudo*:
+3. A primeira célula já aponta para este repositório (`REPO_URL` e `SUBPASTA`); ajuste só se fizer um fork.
+4. Rode **na ordem**, cada um com *Ambiente de execução › Executar tudo*. Cada notebook pede acesso ao
+   Google Drive: é por lá (pasta `assistente-calcadas-resultados`) que os resultados passam de um notebook
+   para o outro, porque no Colab cada notebook roda numa máquina separada.
 
 | Notebook | O que faz | GPU | Tempo aprox. |
 |---|---|---|---|
 | `01_base_e_busca` | tabela da base, recall@1/@3, escolha do limiar | opcional | 2 min |
 | `02_sem_contexto_e_rag` | configurações 1 e 2 no teste | sim | 10–15 min |
 | `03_lora` | treina o LoRA e roda a configuração 3 | sim | 15–25 min |
-| `04_placar_e_erros` | placar, gráfico, alucinações, erros | não | 1 min |
+| `04_placar_e_erros` | placar, gráfico, alucinações, erros e download de `resultados.zip` | não | 1 min |
 | `05_api` | demonstração da API | sim | 3 min |
 
-5. Para guardar as saídas no repositório: *Arquivo › Salvar uma cópia no GitHub* (salva o notebook com as
-   saídas) e envie também os arquivos gerados em `avaliacao/` e `modelos/`.
+5. Para guardar no repositório: *Arquivo › Salvar uma cópia no GitHub* em cada notebook (salva com as saídas)
+   e suba o conteúdo de `resultados.zip` (pastas `avaliacao/` e `modelos/`).
 
 Resultados são determinísticos (decodificação gulosa, semente 42).
 
