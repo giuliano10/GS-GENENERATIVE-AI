@@ -1,0 +1,86 @@
+# Assistente de Acessibilidade em Calçadas – São Paulo
+
+LLM local (Qwen2.5-1.5B-Instruct) que responde dúvidas sobre **regras de calçada, acessibilidade e
+mobilidade a pé** com base em leis federais e do Município de São Paulo, **citando o artigo** usado
+e **recusando** ("não consta") quando a base não cobre a pergunta.
+
+Trabalho da disciplina *Generative AI for Engineering* — tema **mobilidade**.
+Relatório completo: [`RELATORIO.md`](RELATORIO.md).
+
+| Integrante | RM |
+|---|---|
+| Arthur Abreu | 98282 |
+| Arthur Petrin | 98735 |
+| Giuliano Marques | 99694 |
+
+## Estrutura
+
+```
+base/          fontes.csv (fonte, URL, licença), raw/ (HTML oficial), trechos.jsonl (238 trechos, 1 por artigo)
+avaliacao/     casos_teste.jsonl (60 perguntas, 15 "não consta"), lora_treino.jsonl (62), placar e erros
+notebooks/     01 base e busca · 02 sem contexto × RAG · 03 LoRA · 04 placar e erros · 05 API
+src/           busca, geração, avaliação, LoRA, LGPD
+api/           API FastAPI (main.py)
+scripts/       montar_casos.py (gabarito ancorado no texto da lei), gerar_notebooks.py
+modelos/       adaptador LoRA treinado (gerado pelo notebook 03)
+```
+
+## Como reproduzir (Google Colab, GPU T4 gratuita)
+
+1. Abra cada notebook de `notebooks/` no Colab (*Arquivo › Abrir notebook › GitHub* e cole a URL do repositório).
+2. *Ambiente de execução › Alterar tipo de ambiente › T4 GPU*.
+3. Na primeira célula, troque `REPO_URL` pela URL deste repositório.
+4. Rode **na ordem** com *Ambiente de execução › Executar tudo*:
+
+| Notebook | O que faz | GPU | Tempo aprox. |
+|---|---|---|---|
+| `01_base_e_busca` | tabela da base, recall@1/@3, escolha do limiar | opcional | 2 min |
+| `02_sem_contexto_e_rag` | configurações 1 e 2 no teste | sim | 10–15 min |
+| `03_lora` | treina o LoRA e roda a configuração 3 | sim | 15–25 min |
+| `04_placar_e_erros` | placar, gráfico, alucinações, erros | não | 1 min |
+| `05_api` | demonstração da API | sim | 3 min |
+
+5. Para guardar as saídas no repositório: *Arquivo › Salvar uma cópia no GitHub* (salva o notebook com as
+   saídas) e envie também os arquivos gerados em `avaliacao/` e `modelos/`.
+
+Resultados são determinísticos (decodificação gulosa, semente 42).
+
+### Rodar local (VS Code)
+
+```bash
+python -m venv .venv && .venv\Scripts\activate      # Windows  (Linux/Mac: source .venv/bin/activate)
+pip install -r requirements.txt
+python -m src.base_conhecimento --montar             # opcional: refaz base/trechos.jsonl a partir de base/raw/
+python scripts/montar_casos.py                        # opcional: refaz os conjuntos de teste e treino
+uvicorn api.main:app --port 8000                     # abre http://localhost:8000/docs
+```
+
+Sem GPU o modelo de 1,5B roda em CPU, mas leva alguns segundos por resposta.
+
+## API
+
+`POST /perguntar` — `{"pergunta": "Qual a largura mínima da faixa livre da calçada?"}`
+
+```json
+{
+  "resposta": "...",
+  "recusa": false,
+  "fontes": [{"id": "...", "fonte": "...", "artigo": "Art. ...", "url": "...", "trecho": "..."}],
+  "explicacao": {"motivo": "...", "trechos_recuperados": ["..."], "score_top1": 0.0, "limiar": 0.0,
+                 "guarda_de_citacao_acionada": false},
+  "aviso_privacidade": null
+}
+```
+
+Também: `GET /saude`, `GET /privacidade`, documentação interativa em `/docs`.
+
+**Segurança e LGPD:** modelo e busca rodam localmente (nada vai para terceiros); CPF, CNPJ, e-mail,
+telefone, CEP e placa são mascarados antes do processamento; nenhuma pergunta é gravada (o log tem só
+métricas anônimas); pergunta limitada a 500 caracteres; o prompt manda ignorar instruções embutidas;
+uma guarda bloqueia qualquer resposta que não cite um trecho recuperado.
+
+## Licença dos dados
+
+Os textos da base são leis e decretos oficiais, que **não são protegidos por direito autoral**
+(Lei 9.610/1998, art. 8º, IV). A NBR 9050 (ABNT) é citada pelas leis, mas **não** está na base, por ser
+norma paga e protegida.
