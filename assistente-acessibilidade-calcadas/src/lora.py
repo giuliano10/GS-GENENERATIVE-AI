@@ -11,6 +11,7 @@ Exemplos de treino (gerados de avaliacao/lora_treino.jsonl, disjunto do teste):
 """
 from __future__ import annotations
 
+import math
 import random
 
 from .config import DIR_LORA, LLM_ID, SEMENTE, TOP_K
@@ -78,10 +79,12 @@ def treinar(exemplos: list[dict], epocas: int = 3, lr: float = 2e-4, r: int = 16
         return {"input_ids": torch.tensor(ids), "labels": torch.tensor(lab),
                 "attention_mask": torch.tensor(att)}
 
+    # aquecimento de 5% dos passos, em número inteiro (o transformers 5 removeu `warmup_ratio`)
+    passos = math.ceil(len(dados) / (2 * 4)) * epocas
     args = TrainingArguments(
         output_dir=str(saida) + "_ckpt", num_train_epochs=epocas, learning_rate=lr,
         per_device_train_batch_size=2, gradient_accumulation_steps=4,
-        lr_scheduler_type="cosine", warmup_ratio=0.05, logging_steps=5,
+        lr_scheduler_type="cosine", warmup_steps=max(1, round(0.05 * passos)), logging_steps=5,
         save_strategy="no", report_to=[], fp16=torch.cuda.is_available(), seed=SEMENTE)
     Trainer(model=modelo, args=args, train_dataset=dados, data_collator=colar).train()
     modelo.save_pretrained(str(saida))
