@@ -9,7 +9,7 @@ Relatório completo: [`RELATORIO.md`](RELATORIO.md).
 
 | Integrante | RM |
 |---|---|
-| Arthur Abreu | 98282 |
+| Arthur Abreu | 98283 |
 | Arthur Petrin | 98735 |
 | Giuliano Marques | 99694 |
 
