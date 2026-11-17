@@ -13,6 +13,17 @@ Relatório completo: [`RELATORIO.md`](RELATORIO.md).
 | Arthur Petrin | 98735 |
 | Giuliano Marques | 99694 |
 
+## Resultados (60 perguntas de teste)
+
+| Configuração | Acurácia | Alucinação | Recusa correta (não consta) | Citação correta |
+|---|---|---|---|---|
+| Modelo sem contexto | 11,7% | 88,3% | 13,3% | 0% |
+| RAG simples | 68,3% | 25,0% | 53,3% | 68,3% |
+| **RAG + LoRA** | **75,0%** | **13,3%** | **86,7%** | **78,9%** |
+
+Busca híbrida: recall@1 = 0,622 e recall@3 = 0,978. Detalhes, gráficos e os 5 erros analisados estão no
+[`RELATORIO.md`](RELATORIO.md).
+
 ## Estrutura
 
 ```
@@ -22,7 +33,7 @@ notebooks/     01 base e busca · 02 sem contexto × RAG · 03 LoRA · 04 placar
 src/           busca, geração, avaliação, LoRA, LGPD
 api/           API FastAPI (main.py)
 scripts/       montar_casos.py (gabarito ancorado no texto da lei), gerar_notebooks.py
-modelos/       adaptador LoRA treinado (gerado pelo notebook 03)
+modelos/       adaptador LoRA treinado (17 MB, gerado pelo notebook 03)
 ```
 
 ## Como reproduzir (Google Colab, GPU T4 gratuita)
