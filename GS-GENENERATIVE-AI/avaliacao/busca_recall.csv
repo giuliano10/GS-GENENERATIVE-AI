@@ -1,0 +1,4 @@
+buscador,recall@1,recall@3
+tfidf,0.489,0.822
+denso,0.667,0.844
+hibrido,0.622,0.978
