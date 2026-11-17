@@ -311,7 +311,3 @@ conservador demais (15,6% de recusa indevida); (4) falta a Lei 15.442/2011 na ba
 seção 10 atacam cada ponto: limiar duplo, re-ranker, guarda numérica, inclusão da lei faltante e reequilíbrio do
 treino. A guarda numérica sozinha teria bloqueado 2 das 8 respostas afirmativas erradas (T25 e T47).
 
-## 13. Links
-
-- Repositório: https://github.com/giuliano10/GS-GENENERATIVE-AI
-- Vídeo de demonstração: ⏳ *(inserir o link do vídeo)*
