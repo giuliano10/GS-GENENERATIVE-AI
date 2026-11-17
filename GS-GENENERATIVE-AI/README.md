@@ -92,8 +92,3 @@ telefone, CEP e placa são mascarados antes do processamento; nenhuma pergunta �
 métricas anônimas); pergunta limitada a 500 caracteres; o prompt manda ignorar instruções embutidas;
 uma guarda bloqueia qualquer resposta que não cite um trecho recuperado.
 
-## Licença dos dados
-
-Os textos da base são leis e decretos oficiais, que **não são protegidos por direito autoral**
-(Lei 9.610/1998, art. 8º, IV). A NBR 9050 (ABNT) é citada pelas leis, mas **não** está na base, por ser
-norma paga e protegida.
