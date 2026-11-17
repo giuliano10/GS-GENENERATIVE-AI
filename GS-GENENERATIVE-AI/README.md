@@ -44,7 +44,7 @@ modelos/       adaptador LoRA treinado (17 MB, gerado pelo notebook 03)
 4. Rode **na ordem**, cada um com *Ambiente de execução › Executar tudo*. Cada notebook pede acesso ao
    Google Drive: é por lá (pasta `assistente-calcadas-resultados`) que os resultados passam de um notebook
    para o outro, porque no Colab cada notebook roda numa máquina separada.
-
+ 
 | Notebook | O que faz | GPU | Tempo aprox. |
 |---|---|---|---|
 | `01_base_e_busca` | tabela da base, recall@1/@3, escolha do limiar | opcional | 2 min |
